@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "609250214606",
+    "project_id": "bitcointracker-14b27",
+    "storage_bucket": "bitcointracker-14b27.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:609250214606:android:63b336f4cffb9422d9869f",
+        "android_client_info": {
+          "package_name": "com.erenalparslan.bitcointracker"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_uevP8a-AcKVEHM_Mjj1W1p6u-3HS4jQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
