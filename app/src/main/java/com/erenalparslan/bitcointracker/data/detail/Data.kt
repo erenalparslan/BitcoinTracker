@@ -1,4 +1,4 @@
-package com.example.coinmarket.model.detail
+package com.erenalparslan.bitcointracker.data.detail
 
 
 import com.google.gson.annotations.SerializedName

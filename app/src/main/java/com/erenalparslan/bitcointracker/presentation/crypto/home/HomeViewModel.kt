@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.erenalparslan.bitcointracker.common.NetworkResult
 import com.erenalparslan.bitcointracker.domain.BitcoinRepository
-import com.example.coinmarket.model.home.Data
+import com.erenalparslan.bitcointracker.data.home.Data
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

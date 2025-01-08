@@ -7,9 +7,26 @@
     <fragment
         android:id="@+id/favorites"
         android:name="com.erenalparslan.bitcointracker.presentation.crypto.favorites.FavoritesFragment"
-        android:label="FavoritesFragment" />
+        android:label="FavoritesFragment" >
+        <action
+            android:id="@+id/action_favorites_to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/home"
         android:name="com.erenalparslan.bitcointracker.presentation.crypto.home.HomeFragment"
-        android:label="HomeFragment" />
+        android:label="HomeFragment" >
+        <action
+            android:id="@+id/action_home_to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.erenalparslan.bitcointracker.presentation.detail.DetailFragment"
+        android:label="DetailFragment" >
+
+        <argument
+            android:name="symbol"
+            app:argType="string" />
+    </fragment>
 </navigation>
