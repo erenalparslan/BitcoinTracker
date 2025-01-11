@@ -1,4 +1,17 @@
 <resources>
     <string name="app_name">BitcoinTracker</string>
     <string name="crypto_image">Crypto Image</string>
+    <string name="percent_change">%.2f %%</string>
+    <string name="price">%.2f $</string>
+    <string name="divide_usd">%s /USD</string>
+    <string name="login">Logın</string>
+    <string name="register">Regıster</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="have_an_account_log_in_n_no_account_yet_sign_up">Have an account? Log in.\n No account yet? Sign up.</string>
+    <string name="welcome_to_bitcoin_tracker">Welcome to Bitcoin Tracker</string>
+    <string name="username">Username</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="already_have_an_account_sign_in">Already have an account? Sign in</string>
+    <string name="create_your_account">Create Your Account</string>
 </resources>

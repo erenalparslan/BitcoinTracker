@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Aktif buton rengi (yeşil) -->
+    <item android:state_selected="true" android:color="#66BB6A" />
+    <!-- Varsayılan buton rengi (zıt kırmızı) -->
+    <item android:color="#C1C1C1" />
+</selector>

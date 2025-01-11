@@ -7,6 +7,17 @@
     android:gravity="center"
     android:orientation="vertical">
 
+    <com.google.android.material.textfield.TextInputEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/searchEt"
+        android:hint="Search"
+        android:drawableEnd="@drawable/icon_search"
+        android:layout_margin="16dp"
+        android:padding="10dp"/>
+
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"

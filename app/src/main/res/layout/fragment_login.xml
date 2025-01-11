@@ -1,40 +1,74 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:gravity="center">
+    android:padding="16dp">
 
-    <EditText
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="26dp"
+        android:src="@drawable/polygon_matic_logo" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:gravity="center"
+        android:text="@string/welcome_to_bitcoin_tracker"
+        android:textColor="@color/purple_700"
+        android:textSize="24sp"
+        android:textStyle="italic" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:gravity="center"
+        android:textColor="#292727"
+        android:text="@string/have_an_account_log_in_n_no_account_yet_sign_up"
+        android:textSize="12sp" />
+
+
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/emailEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Email"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/background_edit_text"
+        android:hint="@string/email"
         android:inputType="textEmailAddress"
         android:padding="12dp" />
 
-    <EditText
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/passwordEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Password"
+        android:background="@drawable/background_edit_text"
+        android:hint="@string/password"
         android:inputType="textPassword"
         android:padding="12dp" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/loginButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Login"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginTop="16dp"
         android:padding="12dp"
-        android:layout_marginTop="16dp" />
+        android:text="@string/login"
+        app:cornerRadius="10dp" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/registerButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Register"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginTop="8dp"
         android:padding="12dp"
-        android:layout_marginTop="8dp" />
+        android:text="@string/register"
+        app:cornerRadius="10dp"
+        android:backgroundTint="#FF7043"/>
 </LinearLayout>

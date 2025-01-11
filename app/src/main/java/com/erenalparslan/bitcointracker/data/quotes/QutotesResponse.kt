@@ -33,7 +33,7 @@ data class QuotesDetail(
     @SerializedName("last_updated")
     var lastUpdated: String? = null,
     @SerializedName("max_supply")
-    var maxSupply: Long? = null,
+    var maxSupply: Double? = null,
     @SerializedName("name")
     var name: String? = null,
     @SerializedName("num_market_pairs")
@@ -43,7 +43,7 @@ data class QuotesDetail(
     @SerializedName("quote")
     var quote: Quote? = null,
     @SerializedName("self_reported_circulating_supply")
-    var selfReportedCirculatingSupply: Long? = null,
+    var selfReportedCirculatingSupply: Double? = null,
     @SerializedName("self_reported_market_cap")
     var selfReportedMarketCap: Double? = null,
     @SerializedName("slug")

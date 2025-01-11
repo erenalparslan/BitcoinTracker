@@ -1,7 +1,6 @@
 package com.erenalparslan.bitcointracker.presentation.crypto
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -12,7 +11,6 @@ import com.erenalparslan.bitcointracker.R
 import com.erenalparslan.bitcointracker.common.Extensions.setImage
 import com.erenalparslan.bitcointracker.databinding.ItemCoinBinding
 import com.erenalparslan.bitcointracker.domain.model.CoinModel
-import java.lang.Double
 import kotlin.Boolean
 import kotlin.Int
 import kotlin.Unit
@@ -26,19 +24,20 @@ class CoinListAdapter(private val ctx: Context, private val onItemClick: (CoinMo
         fun bind(coin: CoinModel) {
             val quote = coin.quote
             binding.coinName.text = coin.name
-            binding.coinSymbol.text = "${coin.symbol}/USDT"
+            binding.coinSymbol.text = String.format(ctx.getString(R.string.divide_usd), coin.symbol)
             binding.coinPriceChange.text = quote
-            quote?.let {
-                if (Double.parseDouble(it) >= 0) {
+            quote?.toDoubleOrNull()?.let {
+                if (it >= 0) {
                     binding.coinPriceChange.setTextColor(ContextCompat.getColor(ctx, R.color.green))
                 } else {
                     binding.coinPriceChange.setTextColor(ContextCompat.getColor(ctx, R.color.red))
                 }
             }
-            binding.coinValue.text = coin.price
+
+            val priceResult = ctx.getString(R.string.price, coin.price)
+            binding.coinValue.text = priceResult
             setImage(binding.imageView, coin.id.toString())
             binding.root.setOnClickListener {
-                coin.symbol?.let { it1 -> Log.e("Erens", "bind: $it1 ") }
                 onItemClick(coin)
             }
         }

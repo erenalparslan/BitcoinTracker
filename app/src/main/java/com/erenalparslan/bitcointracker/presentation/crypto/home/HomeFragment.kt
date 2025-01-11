@@ -1,8 +1,8 @@
 package com.erenalparslan.bitcointracker.presentation.crypto.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -12,7 +12,6 @@ import com.erenalparslan.bitcointracker.common.viewBinding
 import com.erenalparslan.bitcointracker.databinding.FragmentHomeBinding
 import com.erenalparslan.bitcointracker.domain.model.CoinModel
 import com.erenalparslan.bitcointracker.presentation.crypto.CoinListAdapter
-import com.google.android.play.integrity.internal.c
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -28,8 +27,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         with(binding) {
 
             recyclerView.adapter = CoinListAdapter(requireContext()) { coin ->
-                Log.e("Erens", "onViewCreated: ${coin.symbol}")
                 findNavController().navigate(HomeFragmentDirections.actionHomeToDetailFragment(coin.symbol!!))
+            }
+
+            searchEt.addTextChangedListener { text ->
+                val query = text.toString()
+                filterCoins(query)
             }
 
             lifecycleScope.launch {
@@ -38,7 +41,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                         CoinModel(
                             coin.id.toString(),
                             coin.name,
-                            coin.quote?.uSD?.price.toString(),
+                            coin.quote?.uSD?.price,
                             coin.symbol,
                             coin.quote?.uSD?.percentChange24h.toString(),
                         )
@@ -49,5 +52,28 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
 
+    }
+
+    private fun filterCoins(query: String) {
+        lifecycleScope.launch {
+            viewModel.coins.observe(viewLifecycleOwner) { coins ->
+                val filteredList = coins.filter { coin ->
+                    val name = coin.name ?: kotlin.run { "" }
+                    val symbol = coin.symbol ?: kotlin.run { "" }
+                    name.contains(query, ignoreCase = true) ||
+                            symbol.contains(query, ignoreCase = true)
+
+                }.map { coin ->
+                    CoinModel(
+                        coin.id.toString(),
+                        coin.name,
+                        coin.quote?.uSD?.price,
+                        coin.symbol,
+                        coin.quote?.uSD?.percentChange24h.toString(),
+                    )
+                }
+                (binding.recyclerView.adapter as CoinListAdapter).submitList(filteredList)
+            }
+        }
     }
 }

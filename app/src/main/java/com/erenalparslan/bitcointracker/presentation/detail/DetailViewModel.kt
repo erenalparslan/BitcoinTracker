@@ -52,4 +52,11 @@ class DetailViewModel @Inject constructor(private val repository: BitcoinReposit
             }
         }
     }
+
+    fun addToFavorites(coinId: String) {
+
+        repository.addFavoritesCoin(coinId)
+
+
+    }
 }
