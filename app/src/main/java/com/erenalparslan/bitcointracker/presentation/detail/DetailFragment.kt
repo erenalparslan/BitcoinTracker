@@ -2,22 +2,25 @@ package com.erenalparslan.bitcointracker.presentation.detail
 
 import android.os.Bundle
 import android.view.View
+import android.view.animation.AnimationUtils
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.navigation.navOptions
 import com.erenalparslan.bitcointracker.R
+import com.erenalparslan.bitcointracker.common.Constants.PERIOD_1D
+import com.erenalparslan.bitcointracker.common.Constants.PERIOD_1M
+import com.erenalparslan.bitcointracker.common.Constants.PERIOD_1W
+import com.erenalparslan.bitcointracker.common.Constants.PERIOD_90D
 import com.erenalparslan.bitcointracker.common.Extensions.loadImage
+import com.erenalparslan.bitcointracker.common.Extensions.navigateWithAnimation
 import com.erenalparslan.bitcointracker.common.viewBinding
-import com.erenalparslan.bitcointracker.data.detail.CoinDetail
-import com.erenalparslan.bitcointracker.data.detail.DetailResponse
-import com.erenalparslan.bitcointracker.data.quotes.QuotesDetail
-import com.erenalparslan.bitcointracker.data.quotes.QutotesResponse
 import com.erenalparslan.bitcointracker.databinding.FragmentDetailBinding
-import com.google.gson.Gson
+import com.erenalparslan.bitcointracker.domain.model.CoinDetailModel
+import com.erenalparslan.bitcointracker.domain.model.CoinQuotesModel
 import dagger.hilt.android.AndroidEntryPoint
-import org.json.JSONArray
-import org.json.JSONObject
 
 
 @AndroidEntryPoint
@@ -27,7 +30,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
     private val viewmodel by viewModels<DetailViewModel>()
     private val args by navArgs<DetailFragmentArgs>()
     private var coinId = ""
-    private var coinQuotes: QuotesDetail? = null
+    private var coinQuotes: CoinQuotesModel? = null
     private var price = 0.0
     private var priceResult = ""
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,7 +45,10 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
             parseData(it)
         }
         viewmodel.quotesDetail.observe(viewLifecycleOwner) {
-            coinQuotes = parseDataQuotes(it)
+            it?.let {
+                coinQuotes = parseDataQuotes(it)
+            }
+
         }
         with(binding) {
 
@@ -62,10 +68,10 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
                     button.isSelected = true
 
                     val period = when (button.id) {
-                        coin24hChangeButton.id -> "1D"
-                        coin7dChangeButton.id -> "1W"
-                        coin1mChangeButton.id -> "1M"
-                        coin90dChangeButton.id -> "90D"
+                        coin24hChangeButton.id -> PERIOD_1D
+                        coin7dChangeButton.id -> PERIOD_1W
+                        coin1mChangeButton.id -> PERIOD_1M
+                        coin90dChangeButton.id -> PERIOD_90D
                         else -> ""
                     }
                     showPercentageChange(period)
@@ -73,100 +79,102 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
             }
 
             btnFavorite.setOnClickListener {
+                btnFavorite.isSelected = !btnFavorite.isSelected
                 viewmodel.addToFavorites(coinId)
             }
-        }
-    }
 
+            backButton.setOnClickListener {
+                findNavController().popBackStack()
+            }
 
-    private fun parseData(it: DetailResponse?) {
-        val gson = Gson()
-        val json = gson.toJson(it?.data)
-        val jsonObject = JSONObject(json)
-        val jsonArray = jsonObject[args.symbol] as JSONArray
+            refreshPrice.setOnClickListener {
+                val rotateAnimation =
+                    AnimationUtils.loadAnimation(requireContext(), R.anim.anim_refresh_button)
 
-        val coin = gson.fromJson(jsonArray.getJSONObject(0).toString(), CoinDetail::class.java)
-        coin?.let {
-            with(binding) {
-                cryptoImage.loadImage(it.logo)
-                coinName.text = it.name
-                description.text = it.description
+                refreshPrice.startAnimation(rotateAnimation)
+                viewmodel.getCoinQuotesDetail(coinId)
+
             }
         }
     }
 
-    private fun parseDataQuotes(it: QutotesResponse?): QuotesDetail {
-        val gson = Gson()
-        val json = gson.toJson(it?.data)
-        val jsonObject = JSONObject(json)
-        val jsonArray = jsonObject[args.symbol] as JSONArray
 
-        val coin = gson.fromJson(jsonArray.getJSONObject(0).toString(), QuotesDetail::class.java)
+    private fun parseData(coin: CoinDetailModel) {
 
-        coin?.let {
-            with(binding) {
-                price = it.quote?.uSD?.price ?: 0.0
-                priceResult = getString(R.string.price, price)
-                coinPrice.text = priceResult
-                it.quote?.uSD?.percentChange24h?.let { percentChange24h ->
-                    if (percentChange24h >= 0) {
-                        binding.coin24hChange.setTextColor(
-                            ContextCompat.getColor(
-                                requireContext(),
-                                R.color.green
-                            )
-                        )
-                    } else {
-                        binding.coin24hChange.setTextColor(
-                            ContextCompat.getColor(
-                                requireContext(),
-                                R.color.red
-                            )
-                        )
-                    }
-                }
-                val percentChange = it.quote?.uSD?.percentChange24h ?: 0.0
-                val result = getString(R.string.percent_change, percentChange)
-                coin24hChange.text = result
-            }
+        with(binding) {
+            cryptoImage.loadImage(coin.logo)
+            coinName.text = coin.name
+            description.text = coin.description
         }
-        return coin
+
+    }
+
+    private fun parseDataQuotes(coinQuotes: CoinQuotesModel): CoinQuotesModel {
+
+
+        with(binding) {
+            price = coinQuotes.price
+            priceResult = getString(R.string.price, price)
+            coinPrice.text = priceResult
+
+            if (coinQuotes.percentChange24h >= 0) {
+                binding.coin24hChange.setTextColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.green
+                    )
+                )
+            } else {
+                binding.coin24hChange.setTextColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.red
+                    )
+                )
+            }
+
+            val percentChange = coinQuotes.percentChange24h
+            val result = getString(R.string.percent_change, percentChange)
+            coin24hChange.text = result
+        }
+
+        return coinQuotes
     }
 
     private fun showPercentageChange(period: String) {
         when (period) {
-            "1D" -> {
-                coinQuotes?.quote?.uSD?.percentChange24h?.let { percentChange ->
+            PERIOD_1D -> {
+                coinQuotes?.percentChange24h?.let { percentChange ->
                     textColorSelector(percentChange)
                 }
-                val percentChange = coinQuotes?.quote?.uSD?.percentChange24h ?: 0.0
+                val percentChange = coinQuotes?.percentChange24h ?: 0.0
                 val result = getString(R.string.percent_change, percentChange)
                 binding.coin24hChange.text = result
             }
 
-            "1W" -> {
-                coinQuotes?.quote?.uSD?.percentChange7d?.let { percentChange ->
+            PERIOD_1W -> {
+                coinQuotes?.percentChange7d?.let { percentChange ->
                     textColorSelector(percentChange)
                 }
-                val percentChange = coinQuotes?.quote?.uSD?.percentChange7d ?: 0.0
+                val percentChange = coinQuotes?.percentChange7d ?: 0.0
                 val result = getString(R.string.percent_change, percentChange)
                 binding.coin24hChange.text = result
             }
 
-            "1M" -> {
-                coinQuotes?.quote?.uSD?.percentChange30d?.let { percentChange ->
+            PERIOD_1M -> {
+                coinQuotes?.percentChange30d?.let { percentChange ->
                     textColorSelector(percentChange)
                 }
-                val percentChange = coinQuotes?.quote?.uSD?.percentChange30d ?: 0.0
+                val percentChange = coinQuotes?.percentChange30d ?: 0.0
                 val result = getString(R.string.percent_change, percentChange)
                 binding.coin24hChange.text = result
             }
 
-            "90D" -> {
-                coinQuotes?.quote?.uSD?.percentChange90d?.let { percentChange ->
+            PERIOD_90D -> {
+                coinQuotes?.percentChange90d?.let { percentChange ->
                     textColorSelector(percentChange)
                 }
-                val percentChange = coinQuotes?.quote?.uSD?.percentChange90d ?: 0.0
+                val percentChange = coinQuotes?.percentChange90d ?: 0.0
                 val result = getString(R.string.percent_change, percentChange)
                 binding.coin24hChange.text = result
             }

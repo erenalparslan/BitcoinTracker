@@ -11,11 +11,6 @@ import com.erenalparslan.bitcointracker.R
 import com.erenalparslan.bitcointracker.common.Extensions.setImage
 import com.erenalparslan.bitcointracker.databinding.ItemCoinBinding
 import com.erenalparslan.bitcointracker.domain.model.CoinModel
-import kotlin.Boolean
-import kotlin.Int
-import kotlin.Unit
-import kotlin.let
-import kotlin.toString
 
 class CoinListAdapter(private val ctx: Context, private val onItemClick: (CoinModel) -> Unit) :
     ListAdapter<CoinModel, CoinListAdapter.CoinViewHolder>(CoinDiff) {
@@ -26,7 +21,7 @@ class CoinListAdapter(private val ctx: Context, private val onItemClick: (CoinMo
             binding.coinName.text = coin.name
             binding.coinSymbol.text = String.format(ctx.getString(R.string.divide_usd), coin.symbol)
             binding.coinPriceChange.text = quote
-            quote?.toDoubleOrNull()?.let {
+            quote.toDoubleOrNull()?.let {
                 if (it >= 0) {
                     binding.coinPriceChange.setTextColor(ContextCompat.getColor(ctx, R.color.green))
                 } else {
@@ -36,7 +31,7 @@ class CoinListAdapter(private val ctx: Context, private val onItemClick: (CoinMo
 
             val priceResult = ctx.getString(R.string.price, coin.price)
             binding.coinValue.text = priceResult
-            setImage(binding.imageView, coin.id.toString())
+            setImage(binding.imageView, coin.id)
             binding.root.setOnClickListener {
                 onItemClick(coin)
             }

@@ -1,8 +1,7 @@
-package com.erenalparslan.bitcointracker
+package com.erenalparslan.bitcointracker.presentation.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
 import com.erenalparslan.bitcointracker.common.viewBinding
 import com.erenalparslan.bitcointracker.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint

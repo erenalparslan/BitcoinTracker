@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.erenalparslan.bitcointracker.common.NetworkResult
 import com.erenalparslan.bitcointracker.domain.BitcoinRepository
 import com.erenalparslan.bitcointracker.data.home.Data
+import com.erenalparslan.bitcointracker.domain.model.CoinModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -14,8 +15,8 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(private val repository: BitcoinRepository) : ViewModel() {
 
-    private val _coins = MutableLiveData<List<Data>>()
-    val coins: LiveData<List<Data>> get() = _coins
+    private val _coins = MutableLiveData<List<CoinModel>>()
+    val coins: LiveData<List<CoinModel>> get() = _coins
 
     init {
         getCoinList()
@@ -23,11 +24,11 @@ class HomeViewModel @Inject constructor(private val repository: BitcoinRepositor
 
     private fun getCoinList() {
         viewModelScope.launch {
-            repository.getBitcoinData().collect{
-                when(it){
+            repository.getBitcoinData().collect {
+                when (it) {
                     is NetworkResult.Error -> _coins.postValue(emptyList())
                     is NetworkResult.Loading -> {}
-                    is NetworkResult.Success -> it.data?.data?.let { it1 -> _coins.postValue(it1) }
+                    is NetworkResult.Success -> it.data?.let { it1 -> _coins.postValue(it1) }
                 }
             }
         }

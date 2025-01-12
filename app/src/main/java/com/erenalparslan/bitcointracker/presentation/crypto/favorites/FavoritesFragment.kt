@@ -8,11 +8,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.erenalparslan.bitcointracker.R
+import com.erenalparslan.bitcointracker.common.Extensions.navigateWithAnimation
 import com.erenalparslan.bitcointracker.common.viewBinding
 import com.erenalparslan.bitcointracker.databinding.FragmnetFavoritesBinding
-import com.erenalparslan.bitcointracker.domain.model.CoinModel
 import com.erenalparslan.bitcointracker.presentation.crypto.CoinListAdapter
-import com.erenalparslan.bitcointracker.presentation.crypto.home.HomeFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -28,9 +27,9 @@ class FavoritesFragment : Fragment(R.layout.fragmnet_favorites) {
 
         with(binding) {
             favoritesRw.adapter = CoinListAdapter(requireContext()) { coin ->
-                findNavController().navigate(
+                findNavController().navigateWithAnimation(
                     FavoritesFragmentDirections.actionFavoritesToDetailFragment(
-                        coin.symbol!!
+                        coin.symbol
                     )
                 )
             }
@@ -54,16 +53,8 @@ class FavoritesFragment : Fragment(R.layout.fragmnet_favorites) {
         lifecycleScope.launch {
             viewmodel.allCoins.observe(viewLifecycleOwner) { coins ->
                 val filteredList = coins.filter { coin ->
-                    val symbol = coin.symbol ?: kotlin.run { "" }
+                    val symbol = coin.symbol
                     symbols.contains(symbol)
-                }.map { coin ->
-                    CoinModel(
-                        coin.id.toString(),
-                        coin.name,
-                        coin.quote?.uSD?.price,
-                        coin.symbol,
-                        coin.quote?.uSD?.percentChange24h.toString(),
-                    )
                 }
                 (binding.favoritesRw.adapter as CoinListAdapter).submitList(filteredList)
             }

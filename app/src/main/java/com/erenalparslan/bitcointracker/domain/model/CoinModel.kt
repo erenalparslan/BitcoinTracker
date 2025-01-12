@@ -1,9 +1,9 @@
 package com.erenalparslan.bitcointracker.domain.model
 
 data class CoinModel(
-    val id: String? = null,
-    val name: String? = null,
-    val price: Double? = null,
-    val symbol: String? = null,
-    val quote: String? = null
+    val id: String,
+    val name: String,
+    val price: Double,
+    val symbol: String,
+    val quote: String,
 )

@@ -6,7 +6,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.erenalparslan.bitcointracker.HomeActivity
+import com.erenalparslan.bitcointracker.presentation.activities.HomeActivity
 import com.erenalparslan.bitcointracker.R
 import com.erenalparslan.bitcointracker.common.viewBinding
 import com.erenalparslan.bitcointracker.databinding.FragmentRegisterBinding
@@ -26,16 +26,14 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                 findNavController().navigate(R.id.loginFragment)
             }
 
-            // Kayıt ol butonuna tıklandığında kullanıcıyı kaydet
             registerButton.setOnClickListener {
                 val username = username.text.toString().trim()
                 val email = email.text.toString().trim()
                 val password = password.text.toString().trim()
                 val confirmPassword = confirmPassword.text.toString().trim()
 
-                // Şifrelerin uyuştuğundan emin ol
                 if (password != confirmPassword) {
-                    Toast.makeText(requireContext(), "Şifreler uyuşmuyor", Toast.LENGTH_SHORT)
+                    Toast.makeText(requireContext(), "Passwords do not match", Toast.LENGTH_SHORT)
                         .show()
                     return@setOnClickListener
                 }
@@ -43,7 +41,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                 if (username.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()) {
                     registerUser(username, email, password)
                 } else {
-                    Toast.makeText(requireContext(), "Tüm alanları doldurun", Toast.LENGTH_SHORT)
+                    Toast.makeText(requireContext(), "Fill in all fields", Toast.LENGTH_SHORT)
                         .show()
                 }
             }
@@ -55,10 +53,8 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    // Kayıt başarılı ise kullanıcıyı yönlendir
                     val user = FirebaseAuth.getInstance().currentUser
                     user?.let {
-                        // Firebase'e kullanıcı adını eklemek için kullanıcı profilini güncelle
                         val profileUpdates = UserProfileChangeRequest.Builder()
                             .setDisplayName(username)
                             .build()
@@ -73,10 +69,9 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                             }
                     }
                 } else {
-                    // Kayıt başarısızsa hata mesajı göster
                     Toast.makeText(
                         requireContext(),
-                        "Kayıt başarısız: ${task.exception?.message}",
+                        "Registration failed: ${task.exception?.message}",
                         Toast.LENGTH_SHORT
                     ).show()
                 }

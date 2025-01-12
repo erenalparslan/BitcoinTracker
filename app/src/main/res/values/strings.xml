@@ -14,4 +14,11 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="already_have_an_account_sign_in">Already have an account? Sign in</string>
     <string name="create_your_account">Create Your Account</string>
+    <string name="add_favorites">Add Favorites</string>
+    <string name="hashing_algorithm">Hashing Algorithm:</string>
+    <string name="sha_256">SHA-256</string>
+    <string name="_90d">90D</string>
+    <string name="_1m">1M</string>
+    <string name="_7d">7D</string>
+    <string name="_24h">24H</string>
 </resources>

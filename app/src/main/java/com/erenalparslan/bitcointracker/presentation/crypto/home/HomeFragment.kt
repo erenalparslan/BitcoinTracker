@@ -6,11 +6,12 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.erenalparslan.bitcointracker.R
+import com.erenalparslan.bitcointracker.common.Extensions.navigateWithAnimation
 import com.erenalparslan.bitcointracker.common.viewBinding
 import com.erenalparslan.bitcointracker.databinding.FragmentHomeBinding
-import com.erenalparslan.bitcointracker.domain.model.CoinModel
 import com.erenalparslan.bitcointracker.presentation.crypto.CoinListAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -27,7 +28,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         with(binding) {
 
             recyclerView.adapter = CoinListAdapter(requireContext()) { coin ->
-                findNavController().navigate(HomeFragmentDirections.actionHomeToDetailFragment(coin.symbol!!))
+                findNavController().navigateWithAnimation(
+                    HomeFragmentDirections.actionHomeToDetailFragment(
+                        coin.symbol
+                    )
+                )
             }
 
             searchEt.addTextChangedListener { text ->
@@ -37,16 +42,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
             lifecycleScope.launch {
                 viewModel.coins.observe(viewLifecycleOwner) {
-                    val list = it.map { coin ->
-                        CoinModel(
-                            coin.id.toString(),
-                            coin.name,
-                            coin.quote?.uSD?.price,
-                            coin.symbol,
-                            coin.quote?.uSD?.percentChange24h.toString(),
-                        )
-                    }
-                    (recyclerView.adapter as CoinListAdapter).submitList(list)
+
+                    (recyclerView.adapter as CoinListAdapter).submitList(it)
                 }
             }
         }
@@ -58,19 +55,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         lifecycleScope.launch {
             viewModel.coins.observe(viewLifecycleOwner) { coins ->
                 val filteredList = coins.filter { coin ->
-                    val name = coin.name ?: kotlin.run { "" }
-                    val symbol = coin.symbol ?: kotlin.run { "" }
+                    val name = coin.name
+                    val symbol = coin.symbol
                     name.contains(query, ignoreCase = true) ||
                             symbol.contains(query, ignoreCase = true)
 
-                }.map { coin ->
-                    CoinModel(
-                        coin.id.toString(),
-                        coin.name,
-                        coin.quote?.uSD?.price,
-                        coin.symbol,
-                        coin.quote?.uSD?.percentChange24h.toString(),
-                    )
                 }
                 (binding.recyclerView.adapter as CoinListAdapter).submitList(filteredList)
             }

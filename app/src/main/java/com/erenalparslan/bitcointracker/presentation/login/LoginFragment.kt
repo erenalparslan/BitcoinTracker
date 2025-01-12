@@ -10,11 +10,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import com.erenalparslan.bitcointracker.HomeActivity
+import com.erenalparslan.bitcointracker.presentation.activities.HomeActivity
 import com.erenalparslan.bitcointracker.R
 import com.erenalparslan.bitcointracker.common.viewBinding
 import com.erenalparslan.bitcointracker.databinding.FragmentLoginBinding
-import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

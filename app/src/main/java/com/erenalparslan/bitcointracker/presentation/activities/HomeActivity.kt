@@ -1,15 +1,14 @@
-package com.erenalparslan.bitcointracker
+package com.erenalparslan.bitcointracker.presentation.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
+import com.erenalparslan.bitcointracker.R
 import com.erenalparslan.bitcointracker.common.viewBinding
-import com.erenalparslan.bitcointracker.data.api.ApiFactory
 import com.erenalparslan.bitcointracker.databinding.ActivityHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {

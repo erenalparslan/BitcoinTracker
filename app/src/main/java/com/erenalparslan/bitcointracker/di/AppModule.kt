@@ -8,7 +8,6 @@ import com.erenalparslan.bitcointracker.data.api.ApiFactory
 import com.erenalparslan.bitcointracker.data.api.ApiFactory.Companion.BASE_URL
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.FirebaseStorage
 import dagger.Module
@@ -24,7 +23,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object NetworkModule {
+object AppModule {
 
     @Singleton
     @Provides
